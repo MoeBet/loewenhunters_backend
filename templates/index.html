@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/styles.css')}}">
+
+{% endblock %}
+
+{% block title %}
+löwenhunters
+{% endblock %}
+
+{% block content %}
+
+<!-- Title -->
+  <section class="colored-section" id="title">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-6">
+          <h1 class="big-heading">Spots, Wetterinformationen, Fangberichte und mehr.</h1>
+          <a href="{{url_for('spots')}}" class="btn btn-outline-light btn-lg download-btn"><span class="fas fa-map-marker-alt"></span> Spot</a>
+          <a href="{{url_for('catch')}}" class="btn btn-dark btn-lg download-btn"><span class="fas fa-fish"></span> Fang</a>
+          <a href="{{url_for('weather')}}" class="btn btn-outline-light btn-lg download-btn"><span class="fas fa-cloud"></span> Wetter</a>
+        </div>
+        <div class="col-lg-6">
+          <img src="{{url_for('.static', filename='images/fish_trout.png')}}" alt="artwork-of-a-trout" class="trout">
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Features -->
+
+  <section class="white-section" id="features">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-lg-4 features-item">
+          <i class="fas fa-thermometer-three-quarters features-img fa-4x"></i>
+          <h3 class="feature-title">Temperatur</h3>
+          <p>Temperaturen über und unter der Wasseroberfläche.</p>
+        </div>
+
+        <div class="col-lg-4 features-item">
+          <i class="fas fa-wind features-img fa-4x"></i>
+          <h3 class="feature-title">Wind</h3>
+          <p>Windrichtung und Geschwindigkeit.</p>
+        </div>
+
+        <div class="col-lg-4 features-item">
+          <i class="fas fa-water features-img fa-4x"></i>
+          <h3 class="feature-title">Wasser</h3>
+          <p>Wassertemperatur, Strömungsrichtung und Wellenintervall.</p>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid less-space-at-top">
+    <div class="row">
+
+      <div class="col-lg-4 features-item">
+        <i class="fas fa-fish features-img fa-4x"></i>
+        <h3 class="feature-title">Fangmeldungen</h3>
+        <p>Verzeichnis unserer Fänge verknüpft mit den Tagesaktuellen Wetterdaten.</p>
+      </div>
+
+      <div class="col-lg-4 features-item">
+        <i class="fas fa-map-marked-alt features-img fa-4x"></i>
+        <h3 class="feature-title">Spots</h3>
+        <p>Unsere Angelspots entland der Ostsee.</p>
+      </div>
+
+      <div class="col-lg-4 features-item">
+        <i class="far fa-comments features-img fa-4x"></i>
+        <h3 class="feature-title">Austausch</h3>
+        <p>Erfahrungsberichte, Tips & Tricks</p>
+      </div>
+
+    </div>
+  </div>
+  </section>
+
+{% endblock %}
+
+{block footer %}
+{{super()}}
+
+{% block scripts %}
+{{super()}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+{% endblock %}
+
