@@ -14,8 +14,7 @@ db = SQLAlchemy(app)
 Bootstrap(app)
 
 
-
-"""DatabaseClasses"""
+""" DatabaseClasses """
 
 
 class Catch(db.Model):
@@ -42,6 +41,14 @@ class Weather(db.Model):
     swell_direction = db.Column(db.String(20), nullable=False)
     current_direction = db.Column(db.String(20), nullable=False)
 
+
+class Spot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+    longitude = db.Column(db.String(100), nullable=False)
+    latitude = db.Column(db.String(100), nullable=False)
+    spot_info = db.Column(db.String(100), nullable=False)
 
 db.create_all()
 
@@ -74,10 +81,17 @@ class WeatherForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class SpotForm(FlaskForm):
+    date = DateField('Datum', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    longitude = StringField('Longitude', validators=[DataRequired()])
+    latitude = StringField('Latitude', validators=[DataRequired()])
+    spot_info = StringField('Informationen zum Spot', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 
 @app.route('/catch', methods=['GET', 'POST'])
@@ -98,14 +112,28 @@ def catch():
 
     return render_template('catch.html', form=form)
 
+
 @app.route('/weather', methods=['GET', 'POST'])
 def weather():
     return render_template('weather.html')
 
 
-@app.route('/spots')
+@app.route('/spots', methods=['GET', 'POST'])
 def spots():
-    return render_template('spots.html')
+    form = SpotForm()
+    if request.method == 'POST':
+        new_spot = Spot(
+            date=request.form['date'],
+            name=request.form['name'],
+            longitude=request.form['longitude'],
+            latitude=request.form['latitude'],
+            spot_info=request.form['spot_info']
+        )
+        db.session.add(new_spot)
+        db.session.commit()
+        return redirect(url_for('spots'))
+
+    return render_template('spots.html', form=form)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/styles.css')}}">
+
+{% endblock %}
+
+{% block title %}
+löwenhunters
+{% endblock %}
+
+{% block content %}
+
+<section class="colored-section">
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-6">
+            <h1 class="big-heading">Einen Spot Eintragen!</h1>
+          </div>
+          <div class="col-lg-6">
+            <form action="" method="post" role="form">
+              {{ form.csrf_token() }}
+              {{ wtf.form_field(form.date, 'date', 'date') }}
+              {{ wtf.form_field(form.name, 'name', 'name') }}
+              {{ wtf.form_field(form.longitude, 'longitude', 'longitude') }}
+              {{ wtf.form_field(form.latitude, 'latitude', 'latitude') }}
+              {{ wtf.form_field(form.spot_info, 'description', 'description') }}
+              <br>
+              <input type=submit class='btn btn-warning btn-block'>
+            </form>
+          </div>
+          </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{block footer %}
+{{super()}}
+
+{% block scripts %}
+{{super()}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+{% endblock %}
