@@ -1,23 +1,71 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.fields.html5 import DecimalRangeField, DateField, TimeField
-from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
+from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm, CatchForm, WeatherForm, SpotForm
+from functools import wraps
+from sqlalchemy.orm import relationship
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user, LoginManager
+from flask_gravatar import Gravatar
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+Bootstrap(app)
+gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
+
+
+#Connect to database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///loewenhunters.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-Bootstrap(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 """ DatabaseClasses """
 
 
+class User(UserMixin, db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    name = db.Column(db.String(100))
+    posts = relationship("BlogPost", back_populates="author")
+    comments = relationship("Comment", back_populates="comment_author")
+
+
+class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    author = relationship("User", back_populates="posts")
+    title = db.Column(db.String(250), unique=True, nullable=False)
+    subtitle = db.Column(db.String(250), nullable=False)
+    date = db.Column(db.String(250), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    img_url = db.Column(db.String(250), nullable=False)
+    comments = relationship("Comment", back_populates="parent_post")
+
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    parent_post = relationship("BlogPost", back_populates="comments")
+    comment_author = relationship("User", back_populates="comments")
+    text = db.Column(db.Text, nullable=False)
+
+
 class Catch(db.Model):
+    __tablename__ = "catches"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(20), nullable=False)
     time = db.Column(db.String(20), nullable=False)
@@ -28,6 +76,7 @@ class Catch(db.Model):
 
 
 class Weather(db.Model):
+    __tablename__ = "weatherdata"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(20), nullable=False)
     longitude = db.Column(db.String(100), nullable=False)
@@ -43,6 +92,7 @@ class Weather(db.Model):
 
 
 class Spot(db.Model):
+    __tablename__ = "spots"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.String(20), nullable=False)
@@ -53,45 +103,42 @@ class Spot(db.Model):
 db.create_all()
 
 
-"""Forms"""
 
 
-class CatchForm(FlaskForm):
-    date = DateField('Datum', validators=[DataRequired()])
-    time = TimeField('Uhrzeit', validators=[DataRequired()])
-    location = StringField('Ort', validators=[DataRequired()])
-    species = StringField('Spezies', validators=[DataRequired()])
-    size = StringField('Länge', validators=[DataRequired()])
-    method = StringField('Methode', validators=[DataRequired()])
-    submit = SubmitField('Senden')
 
-
-class WeatherForm(FlaskForm):
-    date = DateField('Date', validators=[DataRequired()])
-    longitude = DecimalRangeField('Longitude', validators=[DataRequired()])
-    latitude = DecimalRangeField('Latitude', validators=[DataRequired()])
-    air_temperature = DecimalRangeField('Air Temperature', validators=[DataRequired()])
-    water_temperature = DecimalRangeField('Water Temperature', validators=[DataRequired()])
-    wind_speed = DecimalRangeField('Wind Speed', validators=[DataRequired()])
-    wind_direction = StringField('Wind Direction', validators=[DataRequired()])
-    swell_height = DecimalRangeField('Swell Height', validators=[DataRequired()])
-    swell_period = DecimalRangeField('Swell Period', validators=[DataRequired()])
-    swell_direction = StringField('Swell Direction', validators=[DataRequired()])
-    current_direction = StringField('Current Direction', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
-class SpotForm(FlaskForm):
-    date = DateField('Datum', validators=[DataRequired()])
-    name = StringField('Name', validators=[DataRequired()])
-    longitude = StringField('Longitude', validators=[DataRequired()])
-    latitude = StringField('Latitude', validators=[DataRequired()])
-    spot_info = StringField('Informationen zum Spot', validators=[DataRequired()])
-    submit = SubmitField('Submit')
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+
+        if User.query.filter_by(email=form.email.data).first():
+            print(User.query.filter_by(email=form.email.data).first())
+            #User already exists
+            flash("You've already signed up with that email, log in instead!")
+            return redirect(url_for('login'))
+
+        hash_and_salted_password = generate_password_hash(
+            form.password.data,
+            method='pbkdf2:sha256',
+            salt_length=8
+        )
+        new_user = User(
+            email=form.email.data,
+            name=form.name.data,
+            password=hash_and_salted_password,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        login_user(new_user)
+        return redirect(url_for("get_all_posts"))
+
+    return render_template("register.html", form=form, current_user=current_user)
 
 
 @app.route('/catch', methods=['GET', 'POST'])
