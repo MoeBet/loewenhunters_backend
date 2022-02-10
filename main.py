@@ -141,6 +141,26 @@ def register():
     return render_template("register.html", form=form, current_user=current_user)
 
 
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        user = User.query.filter_by(email=email).first()
+        # Email doesn't exist or password incorrect.
+        if not user:
+            flash("That email does not exist, please try again.")
+            return redirect(url_for('login'))
+        elif not check_password_hash(user.password, password):
+            flash('Password incorrect, please try again.')
+            return redirect(url_for('login'))
+        else:
+            login_user(user)
+            return redirect(url_for('get_all_posts'))
+    return render_template("login.html", form=form, current_user=current_user)
+
 @app.route('/catch', methods=['GET', 'POST'])
 def catch():
     form = CatchForm()

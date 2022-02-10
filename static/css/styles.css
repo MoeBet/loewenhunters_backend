@@ -26,6 +26,12 @@ p {
   line-height: 1.5;
 }
 
+.subheading {
+  font-family: "Montserrat";
+  font-size: 2rem;
+  line-height: 1.5;
+}
+
 .feature-title {
   font-size: 1.5rem;
 }
