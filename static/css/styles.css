@@ -103,6 +103,10 @@ p {
   text-align: center;
 }
 
+.title {
+  text-align: center;
+  }
+
 .post-preview > a > .post-title {
     font-size: 36px;
 }
