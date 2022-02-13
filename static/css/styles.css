@@ -90,14 +90,12 @@ p {
   right: 8%;
 }
 
-@media (max-width: 760px){
+@media (max-width: 900px){
 .trout {
   width: 80%;
-  right: 0%;
   transform: rotate(0deg);
   position: static;
   margin: 80px 0;
-  padding: 200px;
 }
 
 #title {
