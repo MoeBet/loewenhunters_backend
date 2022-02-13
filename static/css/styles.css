@@ -117,8 +117,16 @@ p {
 }
 
 .download-btn {
+ font-size: 1.5rem;
+  margin: 5% 3% 5% 10%;
+}
+
+.features-item h3{
+  font-size: 2rem;
+}
+
+.features-item p{
   font-size: 1.5rem;
-  margin-left: 50px;
 }
 
 }
