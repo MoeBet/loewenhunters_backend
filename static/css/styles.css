@@ -39,7 +39,7 @@ p {
 /* Containers */
 
 .container-fluid {
-  padding: 7% 12%;
+  padding: 7% 15%;
 }
 
 
@@ -58,7 +58,7 @@ p {
 /* Navigation Bar */
 
 .navbar {
-    padding: 1% 15% 15%;
+    padding: 1%;
 }
 
 .navbar-brand {
