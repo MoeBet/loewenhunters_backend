@@ -39,7 +39,7 @@ p {
 /* Containers */
 
 .container-fluid {
-  padding: 0% 10%;
+  padding: 7% 12%;
 }
 
 
@@ -68,7 +68,7 @@ p {
 }
 
 .nav-item {
-  padding: 0 5px;
+  padding: 0 10px;
 }
 
 .nav-link {
@@ -90,7 +90,7 @@ p {
   right: 8%;
 }
 
-@media (max-width: 900px){
+@media (max-width: 760px){
 .trout {
   width: 80%;
   right: 0%;
@@ -104,7 +104,9 @@ p {
   text-align: center;
 }
 
-
+.post-preview > a > .post-title {
+    font-size: 36px;
+}
 
 }
 
@@ -286,11 +288,8 @@ header.masthead .post-heading .meta a {
   color: #0085A1;
 }
 
-@media only screen and (min-width: 768px) {
-  .post-preview > a > .post-title {
-    font-size: 36px;
-  }
-}
+
+
 .form-control {
     font-size: 1.2rem;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
