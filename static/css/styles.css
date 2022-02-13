@@ -90,46 +90,7 @@ p {
   right: 8%;
 }
 
-@media (max-width: 1000px){
-.trout {
-  width: 80%;
-  transform: rotate(0deg);
-  position: static;
-  margin: auto;
-  padding: 50px 0px 50px 70px;
-}
 
-.big-heading {
-  text-align: center;
-  font-size: 4rem;
-}
-
-.post-preview > a > .post-title {
-    font-size: 36px;
-}
-
-.container-fluid {
-  padding: 7% 3%;
-}
-
-.navbar-brand {
-  font-size: 3.5rem;
-}
-
-.download-btn {
- font-size: 1.5rem;
-  margin: 5% 3% 5% 10%;
-}
-
-.features-item h3{
-  font-size: 2rem;
-}
-
-.features-item p{
-  font-size: 1.5rem;
-}
-
-}
 
 
 /* Download-Buttons */
@@ -387,3 +348,45 @@ footer .copyright {
   text-align: center;
 }
 
+
+@media (max-width: 1000px){
+.trout {
+  width: 80%;
+  transform: rotate(0deg);
+  position: static;
+  margin: auto;
+  padding: 50px 0px 50px 70px;
+}
+
+.big-heading {
+  text-align: center;
+  font-size: 4rem;
+}
+
+.post-preview > a > .post-title {
+    font-size: 36px;
+}
+
+.container-fluid {
+  padding: 7% 3%;
+}
+
+.navbar-brand {
+  font-size: 3.5rem;
+}
+
+.download-btn {
+ font-size: 1.5rem;
+  margin: 5% 3% 5% 10%;
+  text-align: center;
+}
+
+.features-item h3{
+  font-size: 2rem;
+}
+
+.features-item p{
+  font-size: 1.5rem;
+}
+
+}
