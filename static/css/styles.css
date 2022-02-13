@@ -90,7 +90,7 @@ p {
   right: 8%;
 }
 
-@media (max-width: 900px){
+@media (max-width: 1000px){
 .trout {
   width: 80%;
   transform: rotate(0deg);
