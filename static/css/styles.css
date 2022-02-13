@@ -43,11 +43,6 @@ p {
 }
 
 
-.less-space-at-top {
-  margin-top: -200px;
-  margin-bottom: -100px;
-}
-
 /* SECTIONS */
 
 .colored-section {
@@ -107,11 +102,6 @@ p {
 
 #title {
   text-align: center;
-}
-
-.less-space-at-top {
-  margin-top: -50px;
-  margin-bottom: -50px;
 }
 
 
