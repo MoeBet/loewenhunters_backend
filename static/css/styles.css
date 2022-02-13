@@ -90,7 +90,7 @@ p {
   right: 8%;
 }
 
-@media (max-width: 1000px){
+@media (max-width: 900px){
 .trout {
   width: 80%;
   transform: rotate(0deg);
@@ -99,13 +99,9 @@ p {
   padding: 50px 0px 50px 50px;
 }
 
-#title {
+.big-heading {
   text-align: center;
 }
-
-.title {
-  text-align: center;
-  }
 
 .post-preview > a > .post-title {
     font-size: 36px;
