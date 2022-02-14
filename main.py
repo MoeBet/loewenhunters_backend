@@ -272,7 +272,7 @@ def catch():
         db.session.commit()
         return redirect(url_for('catch'))
 
-    return render_template('catch.html', form=form, catches=catches)
+    return render_template('catch.html', form=form, fänge=catches)
 
 
 @app.route('/weather', methods=['GET', 'POST'])

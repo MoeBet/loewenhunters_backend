@@ -52,16 +52,31 @@ löwenhunters
               <h1 class="big-heading">Fänge</h1>
 
               <div class="row">
-                <div class="col-lg-6">
-              {% for catch in catches %}
-                  <h3>{{catch.date}}</h3>
-                  <h3>{{catch.time}}</h3>
-                  <h3>{{catch.location}}</h3>
-                  <h3>{{catch.species}}</h3>
-                  <h3>{{catch.size}}</h3>
-                  <h3>{{catch.method}}</h3>
-                </div>
-              {% endfor %}
+                <div class="col-lg-12">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Datum</th>
+                        <th>Zeit</th>
+                        <th>Ort</th>
+                        <th>Art</th>
+                        <th>Größe</th>
+                        <th>Methode</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for fang in fänge %}
+                      <tr>
+                        <td>{{ fang.date }}</td>
+                        <td>{{ fang.time }}</td>
+                        <td>{{ fang.location }}</td>
+                        <td>{{ fang.species }}</td>
+                        <td>{{ fang.size }}</td>
+                        <td>{{ fang.method }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
             </div>
 
           </div>
