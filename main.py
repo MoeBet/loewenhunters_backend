@@ -258,6 +258,7 @@ def delete_post(post_id):
 @app.route('/catch', methods=['GET', 'POST'])
 def catch():
     form = CatchForm()
+    catches = Catch.query.all()
     if request.method == 'POST':
         new_catch = Catch(
             date=request.form['date'],
@@ -271,7 +272,7 @@ def catch():
         db.session.commit()
         return redirect(url_for('catch'))
 
-    return render_template('catch.html', form=form)
+    return render_template('catch.html', form=form, catches=catches)
 
 
 @app.route('/weather', methods=['GET', 'POST'])
