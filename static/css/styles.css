@@ -12,6 +12,13 @@ p {
   color: #8f8f8f;
 }
 
+
+/* table */
+.table {
+ font-family: "Montserrat";
+ color: #8f8f8f;
+}
+
 /* headings */
 
 .big-heading {
@@ -220,7 +227,7 @@ header.masthead .post-heading .meta {
 }
 
 header.masthead .post-heading .meta a {
-  color: #fff;
+  color: #FFFFFF;
 }
 
 @media only screen and (min-width: 768px) {
@@ -270,8 +277,6 @@ header.masthead .post-heading .meta a {
   color: #0085A1;
 }
 
-
-
 .form-control {
     font-size: 1.2rem;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -300,7 +305,7 @@ header.masthead .post-heading .meta a {
 
 .floating-label-form-group input::-webkit-input-placeholder,
 .floating-label-form-group textarea::-webkit-input-placeholder {
-  color: #868e96;
+  color: #FFFFFF;
   font-family: 'Lora', 'Times New Roman', serif;
 }
 

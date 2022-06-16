@@ -9,6 +9,9 @@ from flask_gravatar import Gravatar
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_ckeditor import CKEditor
 from datetime import date
+import requests
+import arrow
+import statistics
 import os
 
 
@@ -19,8 +22,8 @@ Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 
-#Connect to database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+#Connect to database online = os.environ.get("Database_URL") // offline = "sqlite:///lhunters.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lhunters.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -277,7 +280,71 @@ def catch():
 
 @app.route('/weather', methods=['GET', 'POST'])
 def weather():
-    return render_template('weather.html')
+    tagesbeginn = arrow.utcnow().shift(hours=+1)
+    tagesende = tagesbeginn.shift(hours=+48)
+    API_key = '135b1dd2-8385-11ec-9a77-0242ac130002-135b1e54-8385-11ec-9a77-0242ac130002'
+    response = requests.get(
+        'https://api.stormglass.io/v2/weather/point',
+        params={
+            'lat': '54.066429',
+            'lng': '10.768570',
+            'params': ','.join(
+                ['airTemperature', 'waterTemperature', 'windDirection', 'windSpeed', 'swellDirection', 'swellHeight',
+                 'swellPeriod', 'windWaveDirection', 'currentDirection', ]),
+            'start': tagesbeginn.to('UTC').timestamp(),
+            'end': tagesende.to('UTC').timestamp(),
+        },
+        headers={
+            'Authorization': API_key
+        }
+    )
+
+    weather_data = response.json()
+
+    def get_median(weather_data: dict, keyword: str, hour: int):
+
+        list_of_data = []
+
+        for i in weather_data["hours"]:
+            list_of_data.append(weather_data["hours"][hour][keyword])
+
+        # calculate the median
+        median_of_requested_data = list_of_data[int(len(list_of_data) / 2)]
+
+        # calculate the median of the median_of_requested_data dictionary
+        median_data_list = []
+        for key, value in median_of_requested_data.items():
+            median_data_list.append(value)
+
+        # calculate the median of the median_data_list list
+        print(median_data_list[int(len(median_data_list) / 2)])
+        return median_data_list[int(len(median_data_list) / 2)]
+
+
+    def get_all_params(weather_data, parameter, hour=None):
+        n = 0
+        list_of_data = []
+        for i in range(0, len(weather_data["hours"][n])):
+            list_of_data.append(get_median(weather_data, parameter, hour=n))
+            if n <= 48:
+                n += 1
+            else:
+                break
+        return list_of_data
+
+
+    get_median(weather_data, keyword="windDirection", hour=0)
+    air_temperature_srksdrf = (get_all_params(weather_data, "airTemperature"))
+    swell_direction_srksdrf = (get_all_params(weather_data, "swellDirection"))
+    swell_height_srksdrf = (get_all_params(weather_data, "swellHeight"))
+    swell_period_srksdrf = (get_all_params(weather_data, "swellPeriod"))
+    water_temperature_srksdrf = (get_all_params(weather_data, "waterTemperature"))
+    wind_direction_srksdrf = (get_all_params(weather_data, "windDirection"))
+    wind_speed_srksdrf = (get_all_params(weather_data, "windSpeed"))
+    wind_wave_direction_srksdrf = (get_all_params(weather_data, "windWaveDirection"))
+    current_direction_srksdrf = (get_all_params(weather_data, "currentDirection"))
+
+    return render_template('weather.html', weather_data=weather_data, air_temperature_srksdrf=air_temperature_srksdrf, swell_direction_srksdrf=swell_direction_srksdrf, swell_height_srksdrf=swell_height_srksdrf, swell_period_srksdrf=swell_period_srksdrf, water_temperature_srksdrf=water_temperature_srksdrf, wind_direction_srksdrf=wind_direction_srksdrf, wind_speed_srksdrf=wind_speed_srksdrf, wind_wave_direction_srksdrf=wind_wave_direction_srksdrf, current_direction_srksdrf=current_direction_srksdrf)
 
 
 @app.route('/spots', methods=['GET', 'POST'])
